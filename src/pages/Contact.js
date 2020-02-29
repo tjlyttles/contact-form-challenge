@@ -45,6 +45,19 @@ const useStyles = makeStyles(theme => ({
 
 const Contact = () => {
   const classes = useStyles();
+    const [state, setState] = useState({
+    name: "",
+    email: "",
+    message: "",
+    resData: ""
+  });
+
+  const { name, email, message, resData } = state;
+
+  const handleChange = e => {
+    setState({ ...state, [e.target.name]: e.target.value });
+    console.log(state[e.target.name]);
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
