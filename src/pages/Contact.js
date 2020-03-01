@@ -94,7 +94,7 @@ const Contact = () => {
         contentError: false,
         alert: "Please add your email"
       });
-      M.toast({ html: "Log Deleted" });
+
       return;
     }
 
@@ -133,11 +133,16 @@ const Contact = () => {
         }
       })
       .then(res => {
+        setErrors({
+          ...errors,
+          alert: ""
+        });
         document.getElementById("contact-form").reset();
-        alert("Email sent.");
+        M.toast({ html: "Email was sent!" });
       })
       .catch(err => {
-        alert("Email Failed to send.");
+        console.log("Error: ", err);
+        M.toast({ html: "Hmm.. an error occured" });
       });
   };
   return (
