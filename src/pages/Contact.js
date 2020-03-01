@@ -59,13 +59,12 @@ const Contact = () => {
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
-    console.log(state[e.target.name]);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     var URL =
-      " https://3ydusjobp4.execute-api.us-east-1.amazonaws.com/stage-submission/submit";
+      "https://3ydusjobp4.execute-api.us-east-1.amazonaws.com/stage-submission/submit";
 
     var Namere = /[A-Za-z]{1}[A-Za-z]/;
     if (!Namere.test(name)) {
@@ -94,13 +93,9 @@ const Contact = () => {
     };
 
     axios
-      .post(URL, {
-        data: JSON.stringify(data),
-        crossDomain: true,
-        dataType: "json",
+      .post(URL, JSON.stringify(data), {
         headers: {
-          "content-type": "application/json; charset=UTF-8",
-          "Access-Control-Allow-Origin": "*"
+          "content-type": "application/json; charset=UTF-8"
         }
       })
       .then(res => {
