@@ -65,14 +65,14 @@ const Contact = () => {
   const handleSubmit = e => {
     e.preventDefault();
     var URL =
-      "https://3ydusjobp4.execute-api.us-east-1.amazonaws.com/stage-submission";
+      " https://3ydusjobp4.execute-api.us-east-1.amazonaws.com/stage-submission/submit";
 
     var Namere = /[A-Za-z]{1}[A-Za-z]/;
     if (!Namere.test(name)) {
       alert("Name can not less than 2 char");
       return;
     }
-   
+
     if (email === "") {
       alert("Please enter your email id");
       return;
@@ -93,25 +93,23 @@ const Contact = () => {
       content: content
     };
 
-    axios({
-      type: "POST",
-      url: URL,
-      dataType: "json",
-      crossDomain: "true",
-      contentType: "application/json; charset=utf-8",
-      data: JSON.stringify(data),
-
-      success: function() {
-        // clear form and show a success message
-        alert("Email sent.");
+    axios
+      .post(URL, {
+        data: JSON.stringify(data),
+        crossDomain: true,
+        dataType: "json",
+        headers: {
+          "content-type": "application/json; charset=UTF-8",
+          "Access-Control-Allow-Origin": "*"
+        }
+      })
+      .then(res => {
         document.getElementById("contact-form").reset();
-        window.location.reload();
-      },
-      error: function() {
-        // show an error message
-        alert("UnSuccessfull");
-      }
-    });
+        alert("Email sent.");
+      })
+      .catch(err => {
+        alert("Email Failed to send.");
+      });
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -125,6 +123,7 @@ const Contact = () => {
         </Typography>
         <form
           className={`${classes.form} contact-form`}
+          id="contact-form"
           noValidate
           onSubmit={handleSubmit}
         >
