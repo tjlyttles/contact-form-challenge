@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
+import M from "materialize-css/dist/js/materialize.min.js";
 
 function Copyright() {
   return (
@@ -54,8 +55,15 @@ const Contact = () => {
     email: "",
     content: ""
   });
+  const [errors, setErrors] = useState({
+    nameError: false,
+    emailError: false,
+    contentError: false,
+    alert: ""
+  });
 
   const { name, email, content } = state;
+  const { nameError, emailError, contentError, alert } = errors;
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -63,27 +71,53 @@ const Contact = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    var URL =
+    const URL =
       "https://3ydusjobp4.execute-api.us-east-1.amazonaws.com/stage-submission/submit";
 
-    var Namere = /[A-Za-z]{1}[A-Za-z]/;
+    let Namere = /[A-Za-z]{1}[A-Za-z]/;
     if (!Namere.test(name)) {
-      alert("Name can not less than 2 char");
+      setErrors({
+        ...errors,
+        nameError: true,
+        contentError: false,
+        emailError: false,
+        alert: "Name can not be less than 2 characters"
+      });
       return;
     }
 
     if (email === "") {
-      alert("Please enter your email id");
+      setErrors({
+        ...errors,
+        emailError: true,
+        nameError: false,
+        contentError: false,
+        alert: "Please add your email"
+      });
+      M.toast({ html: "Log Deleted" });
       return;
     }
+
     if (content === "") {
-      alert("Please enter a message");
+      setErrors({
+        ...errors,
+        contentError: true,
+        emailError: false,
+        nameError: false,
+        alert: "Please leave a message with us"
+      });
       return;
     }
 
     var reeamil = /^([\w-]+@([\w-]+\.)+[\w-]{2,6})?$/;
     if (!reeamil.test(email)) {
-      alert("Please enter valid email address");
+      setErrors({
+        ...errors,
+        emailError: true,
+        nameError: false,
+        contentError: false,
+        alert: "Please enter valid email address"
+      });
       return;
     }
     var data = {
@@ -133,9 +167,7 @@ const Contact = () => {
             id="name"
             onChange={handleChange}
           />
-          {/* {nameError && (
-            <small className={classes.formError}> Please enter a name</small>
-          )} */}
+          {nameError && <small className={classes.formError}> {alert} </small>}
           <TextField
             variant="outlined"
             margin="normal"
@@ -147,12 +179,7 @@ const Contact = () => {
             autoComplete="email"
             onChange={handleChange}
           />
-          {/* {emailError && (
-            <small className={classes.formError}>
-              {" "}
-              Please provide a valid email address
-            </small>
-          )} */}
+          {emailError && <small className={classes.formError}> {alert}</small>}
           <TextField
             variant="outlined"
             margin="normal"
@@ -165,12 +192,12 @@ const Contact = () => {
             rows="4"
             onChange={handleChange}
           />
-          {/* {contentError && (
+          {contentError && (
             <small margin="normal" className={classes.formError}>
               {" "}
-              Please include a content
+              {alert}
             </small>
-          )} */}
+          )}
           <br />
           <Button
             type="submit"
