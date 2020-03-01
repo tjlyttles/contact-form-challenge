@@ -64,16 +64,18 @@ const Contact = () => {
 
   const { name, email, content } = state;
   const { nameError, emailError, contentError, alert } = errors;
-
+  // Updates state change
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = e => {
     e.preventDefault();
+    // Endpoint to lambda function
     const URL =
       "https://3ydusjobp4.execute-api.us-east-1.amazonaws.com/stage-submission/submit";
 
+    // Error/validation checks
     let Namere = /[A-Za-z]{1}[A-Za-z]/;
     if (!Namere.test(name)) {
       setErrors({
@@ -120,12 +122,13 @@ const Contact = () => {
       });
       return;
     }
+    // Store user info in data object
     var data = {
       name: name,
       email: email,
       content: content
     };
-
+    // Post data to SES and saving message to dynamoDB
     axios
       .post(URL, JSON.stringify(data), {
         headers: {
