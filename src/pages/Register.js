@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
 import Avatar from "@material-ui/core/Avatar";
@@ -63,6 +63,13 @@ const Register = props => {
       passwordmatch: false
     }
   });
+  useEffect(() => {
+    if (props.auth.isAuthenticated && props.auth.user) {
+      props.history.push("/"); // redirect to userpage
+    }
+
+    // eslint-disable-next-line
+  }, [props.auth.isAuthenticated, props.auth.user]);
 
   const clearErrorState = () => {
     setState({

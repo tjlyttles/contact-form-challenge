@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 import M from "materialize-css/dist/js/materialize.min.js";
+import { Auth } from "aws-amplify";
 
 function Copyright() {
   return (
@@ -67,6 +68,17 @@ const Contact = props => {
   // Updates state change
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
+  };
+
+  const handleSignOut = async event => {
+    event.preventDefault();
+    try {
+      Auth.signOut();
+      props.auth.setAuthStatus(false);
+      props.auth.setUser(null);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const handleSubmit = e => {
@@ -175,8 +187,8 @@ const Contact = props => {
           Sign In
         </Button>
         <Box mt={8}>
-        <Copyright />
-      </Box>
+          <Copyright />
+        </Box>
       </div>
     );
   }
@@ -188,6 +200,14 @@ const Contact = props => {
         <Typography component="h1" variant="h5">
           Welcome {props.auth.user.username}
         </Typography>
+        <Button
+          href="/"
+          onClick={handleSignOut}
+          color="primary"
+          variant="contained"
+        >
+          Sign Out
+        </Button>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <ContactMailIcon />
