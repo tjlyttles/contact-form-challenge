@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Contact = () => {
+const Contact = props => {
   const classes = useStyles();
   const [state, setState] = useState({
     name: "",
@@ -61,9 +61,9 @@ const Contact = () => {
     contentError: false,
     alert: ""
   });
-
   const { name, email, content } = state;
   const { nameError, emailError, contentError, alert } = errors;
+
   // Updates state change
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -148,75 +148,118 @@ const Contact = () => {
         M.toast({ html: "Hmm.. an error occured" });
       });
   };
+  if (!props.auth.isAuthenticated && !props.auth.user) {
+    return (
+      <div className={classes.paper}>
+        <Typography component="h1" variant="h3" mt={3}>
+          {"Send Me A Message"}
+        </Typography>
+        <Typography component="h3" variant="h5">
+          {"Sign up to use our contact form."}
+        </Typography>
+
+        <Button
+          href="/register"
+          type="button"
+          color="primary"
+          variant="contained"
+        >
+          Register
+        </Button>
+
+        <Typography component="h3" variant="h5">
+          {"Already have an account?"}
+        </Typography>
+
+        <Button href="/signin" color="primary" variant="contained">
+          Sign In
+        </Button>
+        <Box mt={8}>
+        <Copyright />
+      </Box>
+      </div>
+    );
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <ContactMailIcon />
-        </Avatar>
+
+      <Fragment>
         <Typography component="h1" variant="h5">
-          Contact Us
+          Welcome {props.auth.user.username}
         </Typography>
-        <form
-          className={`${classes.form} contact-form`}
-          id="contact-form"
-          noValidate
-          onSubmit={handleSubmit}
-        >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="name"
-            label="Name"
-            type="name"
-            id="name"
-            onChange={handleChange}
-          />
-          {nameError && <small className={classes.formError}> {alert} </small>}
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            onChange={handleChange}
-          />
-          {emailError && <small className={classes.formError}> {alert}</small>}
-          <TextField
-            variant="outlined"
-            margin="normal"
-            id="content"
-            label="How can we help you?"
-            name="content"
-            multiline
-            fullWidth
-            required
-            rows="4"
-            onChange={handleChange}
-          />
-          {contentError && (
-            <small margin="normal" className={classes.formError}>
-              {" "}
-              {alert}
-            </small>
-          )}
-          <br />
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            className={classes.submit}
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <ContactMailIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Contact Us
+          </Typography>
+          <form
+            className={`${classes.form} contact-form`}
+            id="contact-form"
+            noValidate
+            onSubmit={handleSubmit}
           >
-            Submit
-          </Button>
-        </form>
-      </div>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="name"
+              label="Name"
+              type="name"
+              id="name"
+              onChange={handleChange}
+            />
+            {nameError && (
+              <small className={classes.formError}> {alert} </small>
+            )}
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={handleChange}
+            />
+            {emailError && (
+              <small className={classes.formError}> {alert}</small>
+            )}
+            <TextField
+              variant="outlined"
+              margin="normal"
+              id="content"
+              label="How can we help you?"
+              name="content"
+              multiline
+              fullWidth
+              required
+              rows="4"
+              onChange={handleChange}
+            />
+            {contentError && (
+              <small margin="normal" className={classes.formError}>
+                {" "}
+                {alert}
+              </small>
+            )}
+            <br />
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              className={classes.submit}
+            >
+              Submit
+            </Button>
+          </form>
+        </div>
+      </Fragment>
+
       <Box mt={8}>
         <Copyright />
       </Box>

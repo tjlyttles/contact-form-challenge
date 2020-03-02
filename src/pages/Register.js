@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router";
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -45,12 +42,15 @@ const useStyles = makeStyles(theme => ({
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3)
   },
+  formError: {
+    color: "red"
+  },
   submit: {
     margin: theme.spacing(3, 0, 2)
   }
 }));
 
-const Register = () => {
+const Register = props => {
   const classes = useStyles();
   const [state, setState] = useState({
     username: "",
@@ -94,7 +94,7 @@ const Register = () => {
         attributes: { email: email }
       });
       console.log(signUpResponse);
-      this.props.history.push("/");
+      props.history.push("/signin");
     } catch (error) {
       let err = null;
       !error.message ? (err = { message: error }) : (err = error);
@@ -165,7 +165,6 @@ const Register = () => {
                 fullWidth
                 label="Password"
                 type="password"
-                id="password"
                 autoComplete="current-password"
               />
             </Grid>
@@ -180,7 +179,6 @@ const Register = () => {
                 fullWidth
                 label="Confirm password"
                 type="password"
-                autoComplete="current-password"
               />
             </Grid>
           </Grid>
@@ -209,4 +207,4 @@ const Register = () => {
   );
 };
 
-export default withRouter(Register);
+export default Register;
